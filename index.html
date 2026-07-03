@@ -156,13 +156,81 @@
             font-family: 'Courier New', monospace;
             margin-bottom: 12px;
             min-height: 70px;
-            font-size: 24px;
+            font-size: 20px;
             text-align: center;
             word-wrap: break-word;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .cart-display {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 2px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            min-height: 50px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .cart-item-qty {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .cart-item-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .cart-item-buttons button {
+            padding: 4px 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-qty-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .cart-qty-btn:active {
+            background: #764ba2;
+        }
+
+        .cart-remove-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .cart-remove-btn:active {
+            background: #ff5252;
         }
 
         .quantity-control {
@@ -276,6 +344,17 @@
             color: #c62828;
         }
 
+        .total-price {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
         .reset-btn {
             width: 100%;
             padding: 12px;
@@ -291,6 +370,23 @@
 
         .reset-btn:active {
             background: #e68900;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .add-to-cart-btn:active {
+            background: #45a049;
         }
 
         .save-btn {
@@ -315,6 +411,13 @@
             display: flex;
             flex-direction: column;
             min-height: 0;
+        }
+
+        .cart-empty {
+            color: #999;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
         }
 
         @supports (padding: max(0px)) {
@@ -344,8 +447,6 @@
             <div class="right-section-top">
                 <h2>💰 Kasse 7.1</h2>
                 
-                <div class="display" id="display">%% Produkt wählen %%</div>
-
                 <h3>Produkte:</h3>
                 <div class="buttons-grid" id="buttonsGrid"></div>
 
@@ -355,6 +456,15 @@
                     <div class="quantity-display" id="quantityDisplay">1</div>
                     <button onclick="increaseQuantity()">➕</button>
                 </div>
+
+                <button class="add-to-cart-btn" onclick="addToCart()">➕ Zum Warenkorb</button>
+
+                <h3>Warenkorb:</h3>
+                <div class="cart-display" id="cartDisplay">
+                    <div class="cart-empty">Der Warenkorb ist leer</div>
+                </div>
+
+                <div class="total-price" id="totalPrice">Gesamt: 0.00€</div>
 
                 <h3>Rückgeld:</h3>
                 <div class="quick-buttons">
@@ -373,7 +483,7 @@
                 <div class="result" id="result"></div>
             </div>
 
-            <button class="reset-btn" onclick="resetCash()">🔄 Reset</button>
+            <button class="reset-btn" onclick="resetCart()">🔄 Reset</button>
         </div>
     </div>
 
@@ -393,13 +503,14 @@
         let products = [];
         let selectedPrice = 0;
         let selectedName = "";
+        let selectedIndex = -1;
         let quantity = 1;
+        let cart = [];
 
         window.addEventListener('load', () => {
             loadProducts();
             renderProductList();
             renderButtons();
-            updateDisplay("%% Produkt wählen %%");
         });
 
         function loadProducts() {
@@ -430,7 +541,6 @@
                 localStorage.setItem('products', JSON.stringify(products));
                 renderButtons();
                 alert('✅ Saved');
-                
             }
         }
 
@@ -465,7 +575,7 @@
                 if (i < products.length) {
                     const product = products[i];
                     button.innerHTML = `<span class="name">${i + 1}. ${product.name}</span><span class="price">${product.price.toFixed(2)}€</span>`;
-                    button.onclick = () => selectProduct(product.price, product.name);
+                    button.onclick = () => selectProduct(i, product.price, product.name);
                 } else {
                     button.innerHTML = `<span class="name">${i + 1}</span>`;
                     button.style.opacity = '0.5';
@@ -475,14 +585,12 @@
             }
         }
 
-        function selectProduct(price, name) {
+        function selectProduct(index, price, name) {
             selectedPrice = price;
             selectedName = name;
+            selectedIndex = index;
             quantity = 1;
-            updateDisplay(`${name}<br>${price.toFixed(2)}€`);
             updateQuantityDisplay();
-            document.getElementById('paymentInput').value = '';
-            document.getElementById('result').innerHTML = '';
         }
 
         function increaseQuantity() {
@@ -503,6 +611,81 @@
             document.getElementById('quantityDisplay').textContent = quantity;
         }
 
+        function addToCart() {
+            if (selectedPrice === 0) {
+                alert('⚠️ Produkt wählen!');
+                return;
+            }
+
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.name === selectedName);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    name: selectedName,
+                    price: selectedPrice,
+                    quantity: quantity
+                });
+            }
+
+            quantity = 1;
+            updateQuantityDisplay();
+            renderCart();
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('paymentInput').value = '';
+        }
+
+        function renderCart() {
+            const cartDiv = document.getElementById('cartDisplay');
+            const totalPriceDiv = document.getElementById('totalPrice');
+
+            if (cart.length === 0) {
+                cartDiv.innerHTML = '<div class="cart-empty">Der Warenkorb ist leer</div>';
+                totalPriceDiv.innerHTML = 'Gesamt: 0.00€';
+                return;
+            }
+
+            let total = 0;
+            cartDiv.innerHTML = '';
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-qty">${item.quantity}x ${item.price.toFixed(2)}€ = ${itemTotal.toFixed(2)}€</div>
+                    </div>
+                    <div class="cart-item-buttons">
+                        <button class="cart-qty-btn" onclick="changeCartQuantity(${index}, 1)">➕</button>
+                        <button class="cart-qty-btn" onclick="changeCartQuantity(${index}, -1)">➖</button>
+                        <button class="cart-remove-btn" onclick="removeFromCart(${index})">❌</button>
+                    </div>
+                `;
+                cartDiv.appendChild(cartItem);
+            });
+
+            totalPriceDiv.innerHTML = `Gesamt: ${total.toFixed(2)}€`;
+        }
+
+        function changeCartQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                removeFromCart(index);
+            } else {
+                renderCart();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
         function quickInput(amount) {
             document.getElementById('paymentInput').value = amount.toFixed(2);
             calculateChange();
@@ -511,13 +694,14 @@
         function calculateChange() {
             const payment = parseFloat(document.getElementById('paymentInput').value);
             const resultDiv = document.getElementById('result');
-            const totalPrice = selectedPrice * quantity;
 
-            if (selectedPrice === 0) {
+            if (cart.length === 0) {
                 resultDiv.className = 'result error';
-                resultDiv.innerHTML = '⚠️ Produkt wählen!';
+                resultDiv.innerHTML = '⚠️ Warenkorb leer!';
                 return;
             }
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
             if (isNaN(payment) || payment === '') {
                 resultDiv.className = 'result error';
@@ -537,14 +721,18 @@
             resultDiv.innerHTML = `✅ OK!<br>Preis: <strong>${totalPrice.toFixed(2)}€</strong><br>Rückgeld: <strong>${change.toFixed(2)}€</strong>`;
         }
 
-        function resetCash() {
-            selectedPrice = 0;
-            selectedName = "";
-            quantity = 1;
-            document.getElementById('paymentInput').value = '';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('quantityDisplay').textContent = '1';
-            updateDisplay("%% Produkt wählen %%");
+        function resetCart() {
+            if (confirm('Warenkorb leeren?')) {
+                cart = [];
+                quantity = 1;
+                selectedPrice = 0;
+                selectedName = "";
+                selectedIndex = -1;
+                document.getElementById('paymentInput').value = '';
+                document.getElementById('result').innerHTML = '';
+                document.getElementById('quantityDisplay').textContent = '1';
+                renderCart();
+            }
         }
 
         function resetToDefault() {
@@ -555,10 +743,6 @@
                 renderButtons();
                 alert('✅ Reset!');
             }
-        }
-
-        function updateDisplay(text) {
-            document.getElementById('display').innerHTML = text;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
