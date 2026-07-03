@@ -2,120 +2,134 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Kassen-App</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 10px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 10px;
+            flex: 1;
+            min-height: 0;
         }
 
         .section {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            min-height: 0;
         }
 
         h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 32px;
-            border-bottom: 4px solid #667eea;
-            padding-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 24px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 8px;
         }
 
         h3 {
             color: #555;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-top: 12px;
+            margin-bottom: 10px;
+            font-size: 18px;
             font-weight: bold;
         }
 
         .product-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .product-item {
             display: grid;
             grid-template-columns: 1fr 1fr 0.4fr;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             background: #f5f5f5;
             border-radius: 8px;
             border: 2px solid #ddd;
         }
 
         .product-item input {
-            padding: 12px;
+            padding: 10px;
             border: 2px solid #ccc;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .product-item button {
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        .product-item button:hover {
+        .product-item button:active {
             background: #ff5252;
         }
 
         .buttons-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .btn-product {
-            padding: 25px;
-            font-size: 22px;
+            padding: 15px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             color: white;
             background: #667eea;
-            min-height: 120px;
+            min-height: 85px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-        }
-
-        .btn-product:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-product:active {
@@ -123,101 +137,97 @@
         }
 
         .btn-product .name {
-            font-size: 20px;
-            margin-bottom: 8px;
+            font-size: 15px;
+            margin-bottom: 5px;
         }
 
         .btn-product .price {
-            font-size: 18px;
+            font-size: 13px;
             opacity: 0.9;
         }
 
         .display {
             background: #333;
             color: #0f0;
-            padding: 25px;
+            padding: 15px;
             border-radius: 8px;
             font-family: 'Courier New', monospace;
-            margin-bottom: 20px;
-            min-height: 100px;
-            font-size: 28px;
+            margin-bottom: 12px;
+            min-height: 70px;
+            font-size: 24px;
             text-align: center;
             word-wrap: break-word;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-quick {
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-quick:active {
+            background: #e68900;
+            transform: scale(0.95);
         }
 
         .input-group {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .input-group input {
             flex: 1;
-            min-width: 150px;
-            padding: 18px;
+            padding: 12px;
             border: 3px solid #667eea;
             border-radius: 8px;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .input-group button {
-            padding: 18px 35px;
+            padding: 12px 20px;
             background: #667eea;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 20px;
-            min-width: 120px;
+            font-size: 16px;
+            min-width: 100px;
         }
 
-        .input-group button:hover {
+        .input-group button:active {
             background: #764ba2;
-        }
-
-        .quick-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn-quick {
-            padding: 20px;
-            background: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 20px;
-            min-height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .btn-quick:hover {
-            background: #e68900;
-            transform: scale(1.05);
-        }
-
-        .btn-quick:active {
-            transform: scale(0.95);
         }
 
         .result {
             background: #e8f5e9;
-            padding: 25px;
+            padding: 15px;
             border-radius: 8px;
-            border-left: 6px solid #4caf50;
-            font-size: 24px;
+            border-left: 5px solid #4caf50;
+            font-size: 18px;
             text-align: center;
-            min-height: 100px;
+            min-height: 70px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -232,59 +242,44 @@
 
         .reset-btn {
             width: 100%;
-            padding: 18px;
+            padding: 12px;
             background: #ff9800;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 20px;
-            margin-top: 15px;
+            font-size: 16px;
+            margin-top: 10px;
         }
 
-        .reset-btn:hover {
+        .reset-btn:active {
             background: #e68900;
         }
 
         .save-btn {
             width: 100%;
-            padding: 18px;
+            padding: 12px;
             background: #4caf50;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
-        .save-btn:hover {
+        .save-btn:active {
             background: #45a049;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .buttons-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .btn-product {
-                min-height: 100px;
-                font-size: 18px;
-                padding: 20px;
-            }
-
-            h2 {
-                font-size: 26px;
-            }
-
-            h3 {
-                font-size: 20px;
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+                padding-top: max(10px, env(safe-area-inset-top));
+                padding-bottom: max(10px, env(safe-area-inset-bottom));
             }
         }
     </style>
@@ -293,24 +288,24 @@
     <div class="container">
         <!-- Linke Seite: Produkte einstellen -->
         <div class="section">
-            <h2>⚙️ Produkte einstellen</h2>
+            <h2>⚙️ Produkte</h2>
             <button class="save-btn" onclick="saveProducts()">💾 Speichern</button>
             
             <div class="product-list" id="productList"></div>
             
-            <button class="reset-btn" onclick="resetToDefault()">↻ Zurücksetzen</button>
+            <button class="reset-btn" onclick="resetToDefault()">↻ Reset</button>
         </div>
 
         <!-- Rechte Seite: Kasse -->
         <div class="section">
             <h2>💰 Kasse</h2>
             
-            <div class="display" id="display">Wähle ein Produkt</div>
+            <div class="display" id="display">Produkt wählen</div>
 
-            <h3>Produkte wählen:</h3>
+            <h3>Produkte:</h3>
             <div class="buttons-grid" id="buttonsGrid"></div>
 
-            <h3>💵 Geld eingeben:</h3>
+            <h3>💵 Geld:</h3>
             <div class="quick-buttons">
                 <button class="btn-quick" onclick="quickInput(0.50)">0.50€</button>
                 <button class="btn-quick" onclick="quickInput(1.00)">1.00€</button>
@@ -320,18 +315,17 @@
             </div>
 
             <div class="input-group">
-                <input type="number" id="paymentInput" placeholder="oder Geld eingeben" step="0.01" min="0">
-                <button onclick="calculateChange()">Berechnen</button>
+                <input type="number" id="paymentInput" placeholder="Geld" step="0.01" min="0">
+                <button onclick="calculateChange()">OK</button>
             </div>
 
             <div class="result" id="result"></div>
 
-            <button class="reset-btn" onclick="resetCash()">🔄 Zurücksetzen</button>
+            <button class="reset-btn" onclick="resetCash()">🔄 Clear</button>
         </div>
     </div>
 
     <script>
-        // Standardprodukte
         const DEFAULT_PRODUCTS = [
             { name: "Apfel", price: 1.50 },
             { name: "Brot", price: 2.50 },
@@ -347,43 +341,33 @@
         let products = [];
         let selectedPrice = 0;
 
-        // Beim Laden der Seite
         window.addEventListener('load', () => {
             loadProducts();
             renderProductList();
             renderButtons();
-            updateDisplay("Wähle ein Produkt");
+            updateDisplay("Produkt wählen");
         });
 
-        // Produkte laden (aus Speicher oder Standard)
         function loadProducts() {
             const saved = localStorage.getItem('products');
-            if (saved) {
-                products = JSON.parse(saved);
-            } else {
-                products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-            }
+            products = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
         }
 
-        // Produkte speichern
         function saveProducts() {
-            // Werte aus Eingabefeldern lesen
             const inputs = document.querySelectorAll('.product-item input');
             products = [];
-            
             let valid = true;
+
             inputs.forEach((input, index) => {
                 if (index % 2 === 0) {
                     const name = input.value.trim();
-                    const priceInput = inputs[index + 1];
-                    const price = parseFloat(priceInput.value);
+                    const price = parseFloat(inputs[index + 1].value);
                     
                     if (!name || isNaN(price) || price < 0) {
-                        alert(`Produkt ${Math.floor(index / 2) + 1}: Name und Preis erforderlich!`);
+                        alert(`Produkt ${Math.floor(index / 2) + 1}: Name und Preis!`);
                         valid = false;
                         return;
                     }
-                    
                     products.push({ name, price });
                 }
             });
@@ -391,61 +375,51 @@
             if (valid) {
                 localStorage.setItem('products', JSON.stringify(products));
                 renderButtons();
-                alert('✅ Produkte gespeichert!');
+                alert('✅ Gespeichert!');
             }
         }
 
-        // Produkt-Liste rendern (zum Bearbeiten)
         function renderProductList() {
             const list = document.getElementById('productList');
             list.innerHTML = '';
-
             products.forEach((product, index) => {
                 const item = document.createElement('div');
                 item.className = 'product-item';
                 item.innerHTML = `
-                    <input type="text" value="${product.name}" placeholder="Name">
-                    <input type="number" value="${product.price}" placeholder="Preis" step="0.01" min="0">
+                    <input type="text" value="${product.name}">
+                    <input type="number" value="${product.price}" step="0.01">
                     <button onclick="deleteProduct(${index})">❌</button>
                 `;
                 list.appendChild(item);
             });
         }
 
-        // Produkt löschen
         function deleteProduct(index) {
             products.splice(index, 1);
             renderProductList();
             renderButtons();
         }
 
-        // Buttons rendern (1-9)
         function renderButtons() {
             const grid = document.getElementById('buttonsGrid');
             grid.innerHTML = '';
-
             for (let i = 0; i < 9; i++) {
                 const button = document.createElement('button');
                 button.className = 'btn-product';
                 
                 if (i < products.length) {
                     const product = products[i];
-                    button.innerHTML = `
-                        <span class="name">${i + 1}. ${product.name}</span>
-                        <span class="price">${product.price.toFixed(2)}€</span>
-                    `;
+                    button.innerHTML = `<span class="name">${i + 1}. ${product.name}</span><span class="price">${product.price.toFixed(2)}€</span>`;
                     button.onclick = () => selectProduct(product.price, product.name);
                 } else {
-                    button.innerHTML = `<span class="name">${i + 1}</span><span class="price">-</span>`;
+                    button.innerHTML = `<span class="name">${i + 1}</span>`;
                     button.style.opacity = '0.5';
                     button.disabled = true;
                 }
-                
                 grid.appendChild(button);
             }
         }
 
-        // Produkt auswählen
         function selectProduct(price, name) {
             selectedPrice = price;
             updateDisplay(`${name}<br>${price.toFixed(2)}€`);
@@ -453,71 +427,60 @@
             document.getElementById('result').innerHTML = '';
         }
 
-        // Schnell-Eingabe
         function quickInput(amount) {
             document.getElementById('paymentInput').value = amount.toFixed(2);
             calculateChange();
         }
 
-        // Rückgeld berechnen
         function calculateChange() {
             const payment = parseFloat(document.getElementById('paymentInput').value);
             const resultDiv = document.getElementById('result');
 
             if (selectedPrice === 0) {
                 resultDiv.className = 'result error';
-                resultDiv.innerHTML = '⚠️ Wähle zuerst ein Produkt!';
+                resultDiv.innerHTML = '⚠️ Produkt wählen!';
                 return;
             }
 
             if (isNaN(payment) || payment === '') {
                 resultDiv.className = 'result error';
-                resultDiv.innerHTML = '⚠️ Gib einen Betrag ein!';
+                resultDiv.innerHTML = '⚠️ Geld eingeben!';
                 return;
             }
 
             if (payment < selectedPrice) {
                 resultDiv.className = 'result error';
                 const missing = (selectedPrice - payment).toFixed(2);
-                resultDiv.innerHTML = `❌ Zu wenig!<br>Es fehlen ${missing}€`;
+                resultDiv.innerHTML = `❌ Zu wenig!<br>${missing}€ fehlt`;
                 return;
             }
 
             const change = payment - selectedPrice;
             resultDiv.className = 'result';
-            resultDiv.innerHTML = `
-                ✅ Verkauft!<br>
-                Preis: ${selectedPrice.toFixed(2)}€<br>
-                Bezahlt: ${payment.toFixed(2)}€<br>
-                <strong>Rückgeld: ${change.toFixed(2)}€</strong>
-            `;
+            resultDiv.innerHTML = `✅ OK!<br>Rückgeld: <strong>${change.toFixed(2)}€</strong>`;
         }
 
-        // Kasse zurücksetzen
         function resetCash() {
             selectedPrice = 0;
             document.getElementById('paymentInput').value = '';
             document.getElementById('result').innerHTML = '';
-            updateDisplay("Wähle ein Produkt");
+            updateDisplay("Produkt wählen");
         }
 
-        // Auf Standard zurücksetzen
         function resetToDefault() {
-            if (confirm('Alle Produkte auf Standard zurücksetzen?')) {
+            if (confirm('Auf Standard zurücksetzen?')) {
                 products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
                 localStorage.removeItem('products');
                 renderProductList();
                 renderButtons();
-                alert('✅ Auf Standard zurückgesetzt!');
+                alert('✅ Reset!');
             }
         }
 
-        // Display Update
         function updateDisplay(text) {
             document.getElementById('display').innerHTML = text;
         }
 
-        // Enter-Taste für Berechnung
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('paymentInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') calculateChange();
