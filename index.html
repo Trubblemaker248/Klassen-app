@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Kassen-App</title>
+    <title>Kasse JKG 7.1 Made by Trubblemaker</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -288,24 +288,24 @@
     <div class="container">
         <!-- Linke Seite: Produkte einstellen -->
         <div class="section">
-            <h2>⚙️ Produkte</h2>
-            <button class="save-btn" onclick="saveProducts()">💾 Speichern</button>
+            <h2>⚙️ Einstellungen</h2>
+            <button class="save-btn" onclick="saveProducts()">💾</button>
             
             <div class="product-list" id="productList"></div>
             
-            <button class="reset-btn" onclick="resetToDefault()">↻ Reset</button>
+            <button class="reset-btn" onclick="resetToDefault()">Reset</button>
         </div>
 
         <!-- Rechte Seite: Kasse -->
         <div class="section">
-            <h2>💰 Kasse</h2>
+            <h2>💰 Kasse 7.1</h2>
             
-            <div class="display" id="display">Produkt wählen</div>
+            <div class="display" id="display">%% Produkt wählen %%</div>
 
             <h3>Produkte:</h3>
             <div class="buttons-grid" id="buttonsGrid"></div>
 
-            <h3>💵 Geld:</h3>
+            <h3>Rückgeld:</h3>
             <div class="quick-buttons">
                 <button class="btn-quick" onclick="quickInput(0.50)">0.50€</button>
                 <button class="btn-quick" onclick="quickInput(1.00)">1.00€</button>
@@ -321,21 +321,21 @@
 
             <div class="result" id="result"></div>
 
-            <button class="reset-btn" onclick="resetCash()">🔄 Clear</button>
+            <button class="reset-btn" onclick="resetCash()">🔄</button>
         </div>
     </div>
 
     <script>
         const DEFAULT_PRODUCTS = [
-            { name: "Apfel", price: 1.50 },
-            { name: "Brot", price: 2.50 },
-            { name: "Milch", price: 1.20 },
-            { name: "Käse", price: 3.50 },
-            { name: "Butter", price: 2.80 },
-            { name: "Eier (6)", price: 2.20 },
-            { name: "Joghurt", price: 1.80 },
-            { name: "Salat", price: 1.50 },
-            { name: "Tomate", price: 0.80 }
+            { name: "Capri-Sun Ice Pops", price: 0.50 },
+            { name: "Alaska Boy Icesticks cola", price: 0.50 },
+            { name: "hitschies Saure Drachenzungen blau", price: 0.50 },
+            { name: "Alaska Boy Icesticks Sauer", price: 0.50 },
+            { name: "Bussy Ice Pops Saurer Apfel", price: 0.50 },
+            { name: "Cool Sticks zuckerfrei", price: 0.50 },
+            { name: "hitschies Saure Drachenzungen bunt", price: 0.50 },
+            { name: "Chupa Chups Squeezee Freeze C&L", price: 0.50 },
+            { name: "Sun Lolly Erdbeere", price: 0.50 }
         ];
 
         let products = [];
@@ -345,7 +345,7 @@
             loadProducts();
             renderProductList();
             renderButtons();
-            updateDisplay("Produkt wählen");
+            updateDisplay("%% Produkt wählen %%");
         });
 
         function loadProducts() {
@@ -375,7 +375,8 @@
             if (valid) {
                 localStorage.setItem('products', JSON.stringify(products));
                 renderButtons();
-                alert('✅ Gespeichert!');
+                alert('✅ Saved');
+                
             }
         }
 
@@ -474,6 +475,7 @@
                 renderProductList();
                 renderButtons();
                 alert('✅ Reset!');
+                alert('load. press okay to close')
             }
         }
 
