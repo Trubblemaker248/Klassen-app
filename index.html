@@ -15,7 +15,7 @@
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 10px;
+            padding: 15px;
         }
 
         .container {
@@ -29,58 +29,59 @@
         .section {
             background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         h2 {
             color: #333;
             margin-bottom: 20px;
-            font-size: 24px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            font-size: 32px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
         }
 
         h3 {
             color: #555;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: bold;
         }
 
         .product-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .product-item {
             display: grid;
-            grid-template-columns: 1fr 1fr 0.3fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr 0.4fr;
+            gap: 10px;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
             background: #f5f5f5;
             border-radius: 8px;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
         }
 
         .product-item input {
-            padding: 8px;
-            border: 1px solid #ccc;
+            padding: 12px;
+            border: 2px solid #ccc;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .product-item button {
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 8px;
+            padding: 12px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .product-item button:hover {
@@ -90,21 +91,21 @@
         .buttons-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         .btn-product {
-            padding: 20px;
-            font-size: 18px;
+            padding: 25px;
+            font-size: 22px;
             font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
             color: white;
             background: #667eea;
-            min-height: 100px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -122,68 +123,105 @@
         }
 
         .btn-product .name {
-            font-size: 16px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 8px;
         }
 
         .btn-product .price {
-            font-size: 14px;
+            font-size: 18px;
             opacity: 0.9;
         }
 
         .display {
             background: #333;
             color: #0f0;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             font-family: 'Courier New', monospace;
             margin-bottom: 20px;
-            min-height: 80px;
-            font-size: 18px;
+            min-height: 100px;
+            font-size: 28px;
             text-align: center;
             word-wrap: break-word;
+            font-weight: bold;
         }
 
         .input-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .input-group input {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #667eea;
+            min-width: 150px;
+            padding: 18px;
+            border: 3px solid #667eea;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 24px;
         }
 
         .input-group button {
-            padding: 12px 25px;
+            padding: 18px 35px;
             background: #667eea;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 20px;
+            min-width: 120px;
         }
 
         .input-group button:hover {
             background: #764ba2;
         }
 
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-quick {
+            padding: 20px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 20px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-quick:hover {
+            background: #e68900;
+            transform: scale(1.05);
+        }
+
+        .btn-quick:active {
+            transform: scale(0.95);
+        }
+
         .result {
             background: #e8f5e9;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
-            border-left: 5px solid #4caf50;
-            font-size: 18px;
+            border-left: 6px solid #4caf50;
+            font-size: 24px;
             text-align: center;
-            min-height: 60px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            font-weight: bold;
         }
 
         .result.error {
@@ -194,14 +232,14 @@
 
         .reset-btn {
             width: 100%;
-            padding: 12px;
+            padding: 18px;
             background: #ff9800;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 20px;
             margin-top: 15px;
         }
 
@@ -211,14 +249,14 @@
 
         .save-btn {
             width: 100%;
-            padding: 12px;
+            padding: 18px;
             background: #4caf50;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 20px;
             margin-bottom: 15px;
         }
 
@@ -236,9 +274,17 @@
             }
 
             .btn-product {
-                min-height: 80px;
-                font-size: 14px;
-                padding: 15px;
+                min-height: 100px;
+                font-size: 18px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            h3 {
+                font-size: 20px;
             }
         }
     </style>
@@ -264,9 +310,17 @@
             <h3>Produkte wählen:</h3>
             <div class="buttons-grid" id="buttonsGrid"></div>
 
-            <h3>Bezahlung:</h3>
+            <h3>💵 Geld eingeben:</h3>
+            <div class="quick-buttons">
+                <button class="btn-quick" onclick="quickInput(0.50)">0.50€</button>
+                <button class="btn-quick" onclick="quickInput(1.00)">1.00€</button>
+                <button class="btn-quick" onclick="quickInput(1.50)">1.50€</button>
+                <button class="btn-quick" onclick="quickInput(2.00)">2.00€</button>
+                <button class="btn-quick" onclick="quickInput(2.50)">2.50€</button>
+            </div>
+
             <div class="input-group">
-                <input type="number" id="paymentInput" placeholder="Geld eingeben" step="0.01" min="0">
+                <input type="number" id="paymentInput" placeholder="oder Geld eingeben" step="0.01" min="0">
                 <button onclick="calculateChange()">Berechnen</button>
             </div>
 
@@ -397,6 +451,12 @@
             updateDisplay(`${name}<br>${price.toFixed(2)}€`);
             document.getElementById('paymentInput').value = '';
             document.getElementById('result').innerHTML = '';
+        }
+
+        // Schnell-Eingabe
+        function quickInput(amount) {
+            document.getElementById('paymentInput').value = amount.toFixed(2);
+            calculateChange();
         }
 
         // Rückgeld berechnen
