@@ -112,6 +112,8 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-bottom: 12px;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .btn-product {
@@ -161,6 +163,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .quantity-control {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-control button {
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 50px;
+        }
+
+        .quantity-control button:active {
+            background: #764ba2;
+        }
+
+        .quantity-display {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
         }
 
         .quick-buttons {
@@ -250,7 +286,7 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
-            margin-top: 10px;
+            margin-top: auto;
         }
 
         .reset-btn:active {
@@ -272,6 +308,13 @@
 
         .save-btn:active {
             background: #45a049;
+        }
+
+        .right-section-top {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
 
         @supports (padding: max(0px)) {
@@ -298,30 +341,39 @@
 
         <!-- Rechte Seite: Kasse -->
         <div class="section">
-            <h2>💰 Kasse 7.1</h2>
-            
-            <div class="display" id="display">%% Produkt wählen %%</div>
+            <div class="right-section-top">
+                <h2>💰 Kasse 7.1</h2>
+                
+                <div class="display" id="display">%% Produkt wählen %%</div>
 
-            <h3>Produkte:</h3>
-            <div class="buttons-grid" id="buttonsGrid"></div>
+                <h3>Produkte:</h3>
+                <div class="buttons-grid" id="buttonsGrid"></div>
 
-            <h3>Rückgeld:</h3>
-            <div class="quick-buttons">
-                <button class="btn-quick" onclick="quickInput(0.50)">0.50€</button>
-                <button class="btn-quick" onclick="quickInput(1.00)">1.00€</button>
-                <button class="btn-quick" onclick="quickInput(1.50)">1.50€</button>
-                <button class="btn-quick" onclick="quickInput(2.00)">2.00€</button>
-                <button class="btn-quick" onclick="quickInput(2.50)">2.50€</button>
+                <h3>Menge:</h3>
+                <div class="quantity-control">
+                    <button onclick="decreaseQuantity()">➖</button>
+                    <div class="quantity-display" id="quantityDisplay">1</div>
+                    <button onclick="increaseQuantity()">➕</button>
+                </div>
+
+                <h3>Rückgeld:</h3>
+                <div class="quick-buttons">
+                    <button class="btn-quick" onclick="quickInput(0.50)">0.50€</button>
+                    <button class="btn-quick" onclick="quickInput(1.00)">1.00€</button>
+                    <button class="btn-quick" onclick="quickInput(1.50)">1.50€</button>
+                    <button class="btn-quick" onclick="quickInput(2.00)">2.00€</button>
+                    <button class="btn-quick" onclick="quickInput(2.50)">2.50€</button>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" id="paymentInput" placeholder="Geld" step="0.01" min="0">
+                    <button onclick="calculateChange()">OK</button>
+                </div>
+
+                <div class="result" id="result"></div>
             </div>
 
-            <div class="input-group">
-                <input type="number" id="paymentInput" placeholder="Geld" step="0.01" min="0">
-                <button onclick="calculateChange()">OK</button>
-            </div>
-
-            <div class="result" id="result"></div>
-
-            <button class="reset-btn" onclick="resetCash()">🔄</button>
+            <button class="reset-btn" onclick="resetCash()">🔄 Reset</button>
         </div>
     </div>
 
@@ -340,6 +392,8 @@
 
         let products = [];
         let selectedPrice = 0;
+        let selectedName = "";
+        let quantity = 1;
 
         window.addEventListener('load', () => {
             loadProducts();
@@ -423,9 +477,30 @@
 
         function selectProduct(price, name) {
             selectedPrice = price;
+            selectedName = name;
+            quantity = 1;
             updateDisplay(`${name}<br>${price.toFixed(2)}€`);
+            updateQuantityDisplay();
             document.getElementById('paymentInput').value = '';
             document.getElementById('result').innerHTML = '';
+        }
+
+        function increaseQuantity() {
+            if (selectedPrice > 0) {
+                quantity++;
+                updateQuantityDisplay();
+            }
+        }
+
+        function decreaseQuantity() {
+            if (selectedPrice > 0 && quantity > 1) {
+                quantity--;
+                updateQuantityDisplay();
+            }
+        }
+
+        function updateQuantityDisplay() {
+            document.getElementById('quantityDisplay').textContent = quantity;
         }
 
         function quickInput(amount) {
@@ -436,6 +511,7 @@
         function calculateChange() {
             const payment = parseFloat(document.getElementById('paymentInput').value);
             const resultDiv = document.getElementById('result');
+            const totalPrice = selectedPrice * quantity;
 
             if (selectedPrice === 0) {
                 resultDiv.className = 'result error';
@@ -449,23 +525,26 @@
                 return;
             }
 
-            if (payment < selectedPrice) {
+            if (payment < totalPrice) {
                 resultDiv.className = 'result error';
-                const missing = (selectedPrice - payment).toFixed(2);
+                const missing = (totalPrice - payment).toFixed(2);
                 resultDiv.innerHTML = `❌ Zu wenig!<br>${missing}€ fehlt`;
                 return;
             }
 
-            const change = payment - selectedPrice;
+            const change = payment - totalPrice;
             resultDiv.className = 'result';
-            resultDiv.innerHTML = `✅ OK!<br>Rückgeld: <strong>${change.toFixed(2)}€</strong>`;
+            resultDiv.innerHTML = `✅ OK!<br>Preis: <strong>${totalPrice.toFixed(2)}€</strong><br>Rückgeld: <strong>${change.toFixed(2)}€</strong>`;
         }
 
         function resetCash() {
             selectedPrice = 0;
+            selectedName = "";
+            quantity = 1;
             document.getElementById('paymentInput').value = '';
             document.getElementById('result').innerHTML = '';
-            updateDisplay("Produkt wählen");
+            document.getElementById('quantityDisplay').textContent = '1';
+            updateDisplay("%% Produkt wählen %%");
         }
 
         function resetToDefault() {
@@ -475,7 +554,6 @@
                 renderProductList();
                 renderButtons();
                 alert('✅ Reset!');
-                alert('load. press okay to close')
             }
         }
 
